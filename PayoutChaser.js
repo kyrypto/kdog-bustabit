@@ -3,18 +3,16 @@ var config = {
     gamesToWait: { value: 100, type: 'text', label: 'Games to wait before making a bet' },
     minimumPayout: { value: 50, type: 'multiplier', label: 'Minimum Payout' },
     maximumPayout: { value: 150, type: 'multiplier', label: 'Maximum Payout' },
-    payoutStep: { value: 5, type: 'text', label: 'Payout Increase / Decrease' },
     maxBetOrMaxDeficit: {
         value: 'maxDeficit', type: 'radio', label: 'Max bet or max negative profit',
         options: {
-            maxDeficit: { value: 500000, type: 'balance', label: 'Stop if deficit is more than' },
+            maxDeficit: { value: 100000, type: 'balance', label: 'Stop if deficit is more than' },
         }
     }
 }
 
 //Vars from config
 var baseBet = config.baseBet.value;
-var payoutStep = config.payoutStep.value;
 var gamesToWait = config.gamesToWait.value;
 var maxBetOrMaxDeficit = config.maxBetOrMaxDeficit.value;
 if (maxBetOrMaxDeficit === "maxBet") {
@@ -74,13 +72,13 @@ engine.on('GAME_ENDED', function () {
             userProfit -= ((baseBet / 100).toFixed() * 100);
             bettedGames++;
             if(isGoingUp){
-                currentPayout += payoutStep;
+                currentPayout += 1;
                 if(currentPayout >= config.maximumPayout.value && isGoingUp){
                     isGoingUp = false;
                     log("Now going down.");
                 }
             }else{
-                currentPayout -= payoutStep;
+                currentPayout -= 1;
                 if(currentPayout <= config.minimumPayout.value && !isGoingUp){
                     log("Now going up.");
                     isGoingUp = true;
